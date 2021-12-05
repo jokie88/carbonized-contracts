@@ -14,16 +14,28 @@ add the polygon mumbai testnet to your metamask
 
 get some matic on the mumbai testnet faucet for your wallet
 
-
+local deploy
 ```
 npx hardhat run scripts/deploy-upgradeable.js
 ```
-
-
+deploy on testnet
 ```
 npx hardhat run scripts/deploy-upgradeable.js --network mumbai
 ```
+upgrade
+```
+npx hardhat run scripts/upgrade.js --network mumbai
+```
 
+verify contract on polygonscan (in contracts root directory)
+```
+#first export all variables in .env file into your terminal environment
+#set -o allexport; source .env; set +o allexport 
+#then run verify command (probably overkill)
+#npx hardhat verify --network mumbai $NFT_CONTRACT_IMPLEMENTATION_ADDRESS 
+npx hardhat verify --network mumbai NFT_CONTRACT_IMPLEMENTATION_ADDRESS 
+
+```
 
 
 ## Notes

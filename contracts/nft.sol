@@ -57,7 +57,7 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
     //     _safeMint(to, tokenId);
     // }
 
-    function safeMint(address to) external {
+    function safeMint(address to) external whenNotPaused {
         //require(msg.value == _mintingFee, 'Please pay correct amount');
         require(_tokenIdCounter.current() < _max_supply, "No more NFTs available to mint");
         require(balanceOf(msg.sender) < 4, 'Each address may only mint four');

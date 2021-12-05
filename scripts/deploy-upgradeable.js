@@ -32,6 +32,8 @@ async function main() {
   await nft.deployed();
 
   console.log("NFT deployed to:", nft.address);
+  console.log("NFT Implementation Address", await hre.upgrades.erc1967.getImplementationAddress(nft.address));
+  console.log("Be sure to update the above variables in your .env file!")
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -22,6 +22,8 @@ async function main() {
   console.log('Upgrading NFT Contract at:', process.env.NFT_CONTRACT_ADDRESS);
   await upgrades.upgradeProxy(process.env.NFT_CONTRACT_ADDRESS, NFT);
   console.log('NFT Contract Upgraded:', process.env.NFT_CONTRACT_ADDRESS);
+  console.log("NFT Implementation Address", await upgrades.erc1967.getImplementationAddress(process.env.NFT_CONTRACT_ADDRESS));
+  console.log("Be sure to update the implementation address variable in your .env file!")
 
 }
 

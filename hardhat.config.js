@@ -43,6 +43,9 @@ module.exports = {
       accounts: [PRIVATE_KEY]
     }
   },
+  etherscan: {
+    apiKey: process.env.POLYGONSCAN_KEY
+  },
   solidity: {
     version: "0.8.2",
     settings: {
