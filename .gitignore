@@ -18,3 +18,7 @@ artifacts/
 .openzeppelin/
 .yalc
 yalc.lock
+
+# OpenZeppelin
+.openzeppelin/dev-*.json
+.openzeppelin/.session
