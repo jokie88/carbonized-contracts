@@ -61,6 +61,9 @@ contract('Carbon', function ([ creator, purchaser ]) {
       for (let i = 0; i < maxPerMinter + 1; i++) {
         await this.token.safeMint(purchaser);
       };
+      // BUG: for some reason, this test is failing - even though the purchaser address stays fixed
+      // When logging `this.token.balanceOf(purchaser)`, it is incrementing in real time, but when logging in the contract, 
+      // it doesn't seem to be working.
       expect(await this.token.balanceOf(purchaser)).to.equal(maxPerMinter);
     });
   });
@@ -69,4 +72,13 @@ contract('Carbon', function ([ creator, purchaser ]) {
 // TODO:
 // 1. Test max 4 mint per account
 // 2. Test max 100 mint total
+/**
+ * Helpful Links:
+ * https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/1abdc9e2243c25cd98b5bd6df789a5c686400b7b/test/token/ERC20/ERC20.test.js
+ * https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/1abdc9e2243c25cd98b5bd6df789a5c686400b7b/test/token/ERC721/presets/ERC721PresetMinterPauserAutoId.test.js
+ * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol
+ * https://gist.github.com/mbvissers/86e17e28ce41ab8d23242075cfe72421
+ * https://docs.openzeppelin.com/upgrades-plugins/1.x/truffle-upgrades#test-usage
+ * https://hardhat.org/tutorial/testing-contracts.html
+ */
 
