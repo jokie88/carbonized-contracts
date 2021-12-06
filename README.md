@@ -6,19 +6,21 @@ git clone repository
 
 ## to deploy contracts:
 
-install metamask and create a new account
+1. Install metamask and create a new account
 
-rename sample.env to .env and add your own private and public keys for deployment
+2. Rename sample.env to .env and add your own private and public keys for deployment
 
-add the polygon mumbai testnet to your metamask
+3. Add the polygon mumbai testnet to your metamask
 
-get some matic on the mumbai testnet faucet for your wallet
+4. Get some matic on the mumbai testnet faucet for your wallet
 
+5. Ensure that you have installed hardhat (`npm install --save-dev hardhat`)
+
+6. Run the following:
 
 ```
 npx hardhat run scripts/deploy-upgradeable.js
 ```
-
 
 ```
 npx hardhat run scripts/deploy-upgradeable.js --network mumbai
@@ -35,7 +37,6 @@ install solt to create verified contract
 https://github.com/hjubb/solt
 
 run in project root directory 
-
 
 
 100 gwei
