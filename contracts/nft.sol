@@ -2,11 +2,12 @@
 pragma solidity ^0.8.2;
 
 
-//import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -16,7 +17,7 @@ import "./ContextMixin.sol";
 
 
 /// @custom:security-contact security@carbonized.xyz
-contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeable, ContextMixin, OwnableUpgradeable {
+contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, PausableUpgradeable, ContextMixin, OwnableUpgradeable, UUPSUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
 
@@ -36,8 +37,10 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
         _mintingFee = mintingFee;
         _bct = ERC20(bctAddress);
         __ERC721_init(ercName, ercSymbol);
+        __ERC721Enumerable_init();
         __Pausable_init();
         __Ownable_init();
+        __UUPSUpgradeable_init(); 
     }
 
     function pause() public onlyOwner {
@@ -57,7 +60,7 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
     //     _safeMint(to, tokenId);
     // }
 
-    function safeMint(address to) external whenNotPaused {
+    function safeMint(address to) public whenNotPaused {
         //require(msg.value == _mintingFee, 'Please pay correct amount');
         require(_tokenIdCounter.current() < _max_supply, "No more NFTs available to mint");
         require(balanceOf(msg.sender) < 4, 'Each address may only mint four');
@@ -70,11 +73,12 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
         _safeMint(to, tokenId);
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override {
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+    {
         super._beforeTokenTransfer(from, to, tokenId);
     }
     
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override(ERC721Upgradeable) returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
         //string memory _tokenURI = _tokenURIs[tokenId];
         //directly set it for now, since one img. at some point if there are more imgs randomly assign using chainlink VRF
@@ -82,7 +86,7 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
         return _tokenURI;
     }
 
-    function contractURI() public pure returns (string memory) {
+    function contractURI() public view returns (string memory) {
         return "http://api.carbonized.xyz/metadata/collection-metadata.json";
     }
 
@@ -116,4 +120,19 @@ contract Carbon is Initializable, ERC721EnumerableUpgradeable, PausableUpgradeab
     {
         return ContextMixin.msgSender();
     }
+
+    // for UUPS upgradability
+    function _authorizeUpgrade(address newImplementation) internal onlyOwner override {} 
+
+    // The following functions are overrides required by Solidity.
+    // From https://wizard.openzeppelin.com/#erc721
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
 }

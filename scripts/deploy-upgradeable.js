@@ -30,10 +30,11 @@ async function main() {
   const nft = await hre.upgrades.deployProxy(NFT, [max_supply, mintingFee, bct_address, ercName, ercSymbol], {initializer: 'initialize'});
 
   await nft.deployed();
-
+  let implementationAddress = await hre.upgrades.erc1967.getImplementationAddress(nft.address);
   console.log("NFT deployed to:", nft.address);
-  console.log("NFT Implementation Address", await hre.upgrades.erc1967.getImplementationAddress(nft.address));
-  console.log("Be sure to update the above variables in your .env file!")
+  console.log("NFT Implementation Address", implementationAddress);
+  console.log("to verify on polygonscan: npx hardhat verify --network mumbai ", implementationAddress);
+  console.log("Be sure to update the above variables in your .env file!");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

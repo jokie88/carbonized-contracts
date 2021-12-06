@@ -40,6 +40,10 @@ npx hardhat verify --network mumbai NFT_CONTRACT_IMPLEMENTATION_ADDRESS
 
 ```
 
+hardhat console for quick testing
+```
+npx hardhat console --network mumbai
+```
 
 ## Notes
 
@@ -56,6 +60,7 @@ run in project root directory
 0.000000000000000100
 100 BCT is in wei:
 100000000000000000000
+
 
 # Advanced Sample Hardhat Project
 
