@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
+import "hardhat/console.sol";
 
 import "./ContextMixin.sol";
 
@@ -21,7 +21,7 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
 
-    CountersUpgradeable.Counter private _tokenIdCounter;
+//    CountersUpgradeable.Counter private _tokenIdCounter;
     uint256 private _max_supply;
     uint256 private _mintingFee; 
     
@@ -62,14 +62,12 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
 
     function safeMint(address to) public whenNotPaused {
         //require(msg.value == _mintingFee, 'Please pay correct amount');
-        require(_tokenIdCounter.current() < _max_supply, "No more NFTs available to mint");
+        require(totalSupply() < _max_supply, "No more NFTs available to mint");
         require(balanceOf(msg.sender) < 4, 'Each address may only mint four');
-
+        
         address from = msg.sender;
         _bct.transferFrom(from, address(this), _mintingFee);
-        
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
+        uint256 tokenId = totalSupply();
         _safeMint(to, tokenId);
     }
 
