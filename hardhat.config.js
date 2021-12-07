@@ -40,8 +40,9 @@ module.exports = {
       accounts: [PRIVATE_KEY]
     },
     matic: {
-      url: "https://matic.chainstacklabs.com",
-      accounts: [PRIVATE_KEY]
+      url: process.env.ALCHEMY_ENDPOINT,
+      accounts: [PRIVATE_KEY],
+      timeout: 480000,
     }
   },
   etherscan: {
