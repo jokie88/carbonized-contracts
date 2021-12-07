@@ -64,16 +64,12 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
         //require(msg.value == _mintingFee, 'Please pay correct amount');
         require(totalSupply() < _max_supply, "No more NFTs available to mint");
         require(balanceOf(msg.sender) < 4, 'Each address may only mint four');
-        
+
         address from = msg.sender;
         _bct.transferFrom(from, address(this), _mintingFee);
+        
         uint256 tokenId = totalSupply();
         _safeMint(to, tokenId);
-    }
-
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
     }
     
     function tokenURI(uint256 tokenId) public view override(ERC721Upgradeable) returns (string memory) {
@@ -107,6 +103,22 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
         return ERC721Upgradeable.isApprovedForAll(_owner, _operator);
     }
 
+    // The following functions are overrides required by Solidity.
+    // From https://wizard.openzeppelin.com/#erc721
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
     /**
      * This is used instead of msg.sender as transactions won't be sent by the original token owner, but by OpenSea.
      */
@@ -122,15 +134,6 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
     // for UUPS upgradability
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override {} 
 
-    // The following functions are overrides required by Solidity.
-    // From https://wizard.openzeppelin.com/#erc721
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
+
 
 }
