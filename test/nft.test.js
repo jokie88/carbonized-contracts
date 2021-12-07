@@ -50,12 +50,20 @@ contract('Carbon', function ([ creator, purchaser ]) {
   });
 
   describe('minting', function () {
-    it('purchaser can mint 1 token', async function () {
+    it('purchaser can mint 1 token and check that they have received the token, got the correct metadata and paid the correct amount', async function () {
       const tokenId = 0;
       await this.token.safeMint(purchaser);
       expect(await this.token.balanceOf(purchaser)).to.equal(1);
       expect(await this.token.ownerOf(tokenId)).to.equal(purchaser);
       expect(await this.token.tokenURI(tokenId)).to.equal(baseURI);
+      expect(await simpleToken.balanceOf(this.token.address)).to.be.bignumber.equal(mintingFee);
+    });
+    // check that total supply of token is equal to maxSupply
+    it('contract can only mint 100 tokens total', async function () {
+      for (let i = 0; i < maxSupply; i++) {
+        await this.token.safeMint(purchaser);
+      };
+    expect(await this.token.totalSupply()).to.equal(maxSupply);
     });
     it('purchaser can mint no more than 4 tokens', async function () {
       for (let i = 0; i < maxPerMinter + 1; i++) {
