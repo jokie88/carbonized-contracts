@@ -76,14 +76,14 @@ contract Carbon is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
         //string memory _tokenURI = _tokenURIs[tokenId];
         //directly set it for now, since one img. at some point if there are more imgs randomly assign using chainlink VRF
-        string memory _tokenURI = "http://api.carbonized.xyz/metadata/test/metadata.json";
-        //string memory _tokenURI = "http://api.carbonized.xyz/metadata/metadata.json";   
+        //string memory _tokenURI = "http://api.carbonized.xyz/metadata/test/metadata.json";
+        string memory _tokenURI = "http://api.carbonized.xyz/metadata/metadata.json";   
         return _tokenURI;
     }
 
     function contractURI() public view returns (string memory) {
-        return "http://api.carbonized.xyz/metadata/test/collection-metadata.json";
-        //return "http://api.carbonized.xyz/metadata/collection-metadata.json";
+        //return "http://api.carbonized.xyz/metadata/test/collection-metadata.json";
+        return "http://api.carbonized.xyz/metadata/collection-metadata.json";
     }
 
     function withdraw(IERC20 token, address recipient, uint256 amount) public onlyOwner {
